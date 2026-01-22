@@ -1,9 +1,11 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import { spawn } from "child_process";
 import { zipFolder, makeDirectory } from "./zipFolder.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import { uploadFile } from "./s3Client.js";
+import { LoggerSingleTon } from "./Logger.js";
+import { randomUUID } from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,12 +13,61 @@ const __dirname = path.dirname(__filename);
 const DUMP_DIR_NAME = "DUMP_COLLECTIONS";
 const ZIP_DIR_NAME = "ZIPPED_FILES";
 
+
+function randomDateToday() {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0); // today 00:00:00
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999); // today 23:59:59
+
+    const randomTime =
+        start.getTime() + Math.random() * (end.getTime() - start.getTime());
+
+    return new Date(randomTime);
+}
+
+const objectIdByTime = (date) => ObjectId.createFromTime(date);
+
+function convertObjectIdToDate(objectId) {
+    return new Date(objectId.getTimestamp());
+}
+
+function objectIdMonthsAgo(months) {
+    const date = randomDateToday();
+    date.setMonth(date.getMonth() - months);
+
+    const seconds = Math.floor(date.getTime() / 1000);
+    return ObjectId.createFromTime(seconds);
+}
+
+function printArraySizeMB(array) {
+    try {
+        const sizeMB =
+            Buffer.byteLength(JSON.stringify(array)) / (1024 * 1024);
+
+        return `${sizeMB.toFixed(2)} MB`
+    } catch (err) {
+        console.error("Failed to calculate array size (circular reference)");
+    }
+}
+
+
+const getObjectIdFromDate = (dateString) => {
+    const date = new Date(dateString); // parse string
+    const seconds = Math.floor(date.getTime() / 1000); // ms → sec
+    return ObjectId.createFromTime(seconds);
+};
+
+const logger = LoggerSingleTon.getLoggerInstance()
+
 // #region Utility functions
 const getMonthRange = (year, month) => {
     const start = new Date(Date.UTC(year, month - 1, 1));
     const end = new Date(Date.UTC(year, month, 1));
     return { start, end };
 }
+
 
 const getDateWiseCollectionName = (date, baseCollectionName) => {
     const formattedDate = new Date(date);
@@ -34,14 +85,17 @@ export class MongoArchiveService {
         this.client = new MongoClient(mongoUri);
         this.mongoUri = mongoUri;
         this.dbName = dbName;
+        this.base64 = Buffer.alloc(1024 * 1024).toString('base64');
     }
 
     async connect() {
         await this.client.connect();
+        logger.info('====== Connected to DB ======');
         this.db = this.client.db(this.dbName);
     }
 
     async disconnect() {
+        logger.info('====== Disonnected to DB ======');
         await this.client.close();
     }
 
@@ -49,7 +103,7 @@ export class MongoArchiveService {
         try {
             await this.connect();
             // const dbName = '1spoc-staging';
-            const collectionArray = ["Workflows", "users", "New_Workflows"];
+            const collectionArray = ["users"];
 
             for (let index = 0; index < collectionArray.length; index++) {
 
@@ -61,15 +115,15 @@ export class MongoArchiveService {
                 if (createCollectionResult.status === "FAILED") {
                     // TODO : WHAT IF FOR ONE MONTH SUCCESS AND SECOND MONTH FAILED
                     // throw new Error("Error occured while creating monthly collection");
-                    console.log(`Error occured while archival of collection ; ${collectionName}`);
+                    logger.info(`Error occured while archival of collection ; ${collectionName}`);
                 } else {
-                    console.log(`ARCHIVAL DONE FOR COLLECTION : ${collectionName}`);
+                    logger.info(`ARCHIVAL DONE FOR COLLECTION : ${collectionName}`);
                 }
             }
         } catch (error) {
-            console.log(error);
+            logger.info(error);
         } finally {
-            await client.close();  // always close connection
+            await this.client.close();  // always close connection
         }
     }
 
@@ -87,10 +141,12 @@ export class MongoArchiveService {
      */
     async createMonthlyCollection(collectionInstance, baseCollectionName) {
 
-        const LOG_PREFIX = `MONTHLY_ARCHIVE|${baseCollectionName}`;
-        const BATCH_SIZE = 200;
+        const collectionUId = `${randomUUID().replaceAll("-", "")}|${baseCollectionName}`;
+        const LOG_PREFIX = `MONTHLY_ARCHIVE`;
+        const BATCH_SIZE = 100;
         const SKIP_LATEST_MONTHS = 3;
         const DELETE_ARCHIVE_DOCS = true;
+        const functionName = `createMonthlyCollection`;
 
         try {
 
@@ -98,8 +154,12 @@ export class MongoArchiveService {
             if (!this.db || !collectionInstance || !baseCollectionName) {
                 throw new Error("Invalid arguments passed to createMonthlyCollection");
             }
-
-            console.log(`${LOG_PREFIX} Creating Monthly Collection for ${baseCollectionName} START: ${new Date().toLocaleString()} `);
+            logger.info(JSON.stringify({
+                description: `Creating Monthly Collection for ${baseCollectionName} started`,
+                tag: LOG_PREFIX,
+                collectionUId,
+                functionName,
+            }));
 
             // STEP 1 : Find the upper limit
             const dateUpperLimit = new Date();
@@ -107,27 +167,60 @@ export class MongoArchiveService {
             dateUpperLimit.setDate(1); // set to start of that month
             dateUpperLimit.setHours(0, 0, 0, 0);
 
-            let _processDocumentsCount = 0;
+            let _totalProcessDocumentsCount = 0;
+            let _processDocumentsForCollection = 0;
             let _iterationCount = 0;
             let _dateWiseCollectionName = null;
             let _prevCollectionName = null;
+            const archivalStatistics = [];
 
             // STEP 2 : Find the oldest document
-            // let currentOldestDocument = await collectionInstance.findOne({ createdAt: { $exists: true } }, {}, { sort: { createdAt: 1 } });
-            let currentOldestDocument = await collectionInstance.findOne({}, {}, { sort: { createdAt: 1 } });
-            let targetDate = currentOldestDocument && currentOldestDocument.createdAt;
+            let currentOldestDocument = await collectionInstance.findOne({}, {}, { sort: { _id: 1 } });
+            // let currentOldestDocument = await collectionInstance.findOne({}, {}, { sort: { _id: 1 } });
+            // console.log("currentOldestDocument", currentOldestDocument);
 
-            while (currentOldestDocument && targetDate < dateUpperLimit) {
+            let targetDate = convertObjectIdToDate(currentOldestDocument._id); // only for workflows
+            if (targetDate) {
+                logger.info(JSON.stringify({
+                    description: `First Target Date ${new Date(targetDate).toLocaleString()}, Upper Limit: ${new Date(dateUpperLimit).toLocaleString()}`,
+                    collectionUId,
+                    tag: LOG_PREFIX,
+                    functionName,
+                }));
+            } else {
+                logger.info(JSON.stringify({
+                    description: `No data to process for collection : ${baseCollectionName}`,
+                    collectionUId,
+                    tag: LOG_PREFIX,
+                    functionName,
+                }));
+            }
+
+
+            while (currentOldestDocument && targetDate) {
 
                 // STEP 2A : Find month of this document
                 const year = targetDate.getFullYear()
                 const month = targetDate.getMonth() + 1; // getMonth() gives --> currnetMonth - 1
 
                 const { start, end } = getMonthRange(year, month);
-                console.log(`${LOG_PREFIX} Iteration : ${_iterationCount} : ${start} < Processing_Range < ${end}`);
+                logger.info(JSON.stringify({
+                    description: `Iteration : ${_iterationCount} : ${new Date(start).toLocaleDateString()} < Processing_Range < ${new Date(end).toLocaleDateString()}`,
+                    collectionUId,
+                    tag: LOG_PREFIX,
+                    functionName,
+                }));
 
                 // Important : Collection must have indexing on "createdAt" field (NON NEGOTIABLE) 
-                const filter = { createdAt: { "$gte": start, "$lt": end } };
+                const filter = {
+                    _id: {
+                        "$gte": getObjectIdFromDate(start),
+                        "$lt": getObjectIdFromDate(end)
+                    }
+                };
+
+                console.log(filter);
+
 
                 _dateWiseCollectionName = getDateWiseCollectionName(targetDate, baseCollectionName);
 
@@ -135,47 +228,106 @@ export class MongoArchiveService {
                 if (_prevCollectionName !== _dateWiseCollectionName) {
                     if (_prevCollectionName) { // we got new collection hence dump the previous one 
 
-                        console.log(`${LOG_PREFIX} | BATCH PROCCESSING END FOR ${_prevCollectionName} | DUMP-ZIP-UploadToS3 START`);
-                        await this.dumpZipNUploadToS3(_prevCollectionName);
-                        console.log(`${LOG_PREFIX} | DUMP-ZIP-UploadToS3 END`);
+                        archivalStatistics.push({
+                            collectionName: _prevCollectionName,
+                            processedDocuments: _processDocumentsForCollection
+                        })
+
+                        // await this.dumpZipNUploadToS3(_prevCollectionName);
+                        logger.info(JSON.stringify({
+                            description: `${_dateWiseCollectionName} collections zip file uploaded on s3`,
+                            collectionUId,
+                            archivalStatistics,
+                            functionName,
+                            montlyCollectionName: _dateWiseCollectionName,
+                            filter,
+                            tag: LOG_PREFIX,
+                        }));
                     }
                     _prevCollectionName = _dateWiseCollectionName;
+                    _processDocumentsForCollection = 0;
                 }
 
                 // STEP 2B : migrate data within that month 
-                const _documents = await collectionInstance.find(filter).sort({ createdAt: 1 }).limit(BATCH_SIZE).toArray();
+                logger.info(`Fetching START for Documents : ${BATCH_SIZE} ,filter: ${JSON.stringify(filter)}`);
+                const _documents = await collectionInstance.find(filter).sort({ _id: 1 }).limit(BATCH_SIZE).toArray();
+                logger.info(`Fetching END! Document Size: ${printArraySizeMB(_documents)}`);
+
                 const currentDocumentsLength = _documents.length;
-                _processDocumentsCount += currentDocumentsLength;
+                _totalProcessDocumentsCount += currentDocumentsLength;
+                _processDocumentsForCollection += currentDocumentsLength;
 
                 // THIS CONDITION NEVER OCCURE | How will let we know that for one month batch processing is end ??
                 // This condition occure when within one month all documents get processed [BATCH PROCCESSING END]
-
                 if (currentDocumentsLength === 0) {
-                    console.log(`${LOG_PREFIX} : No document found for _dateWiseCollectionName : ${_dateWiseCollectionName},  iterationCount : ${_iterationCount}`);
+                    logger.info(JSON.stringify({
+                        description: `No document found for dateWiseCollectionName : ${_dateWiseCollectionName},  iterationCount : ${_iterationCount}`,
+                        collectionUId,
+                        functionName,
+                        monthlyCollectionName: _dateWiseCollectionName,
+                        tag: LOG_PREFIX,
+                    }));
                     break;
+
+
                 }
+                logger.info(`INSERT MANY START, DOCUMENT SIZE: ${currentDocumentsLength}`);
                 const createCollectionRes = await this.createCollection(_documents, _dateWiseCollectionName);
+                logger.info(`INSERT MANY END`);
 
                 if (createCollectionRes.status === "FAILED") {
                     // TODO  : HANDLE IF CASE OF INSERTION FAILS
-                    console.log("INSERTION FAILS", createCollectionRes.error);
+                    logger.error(JSON.stringify({
+                        description: `INSERTION FAILED, ${createCollectionRes.error}`,
+                        collectionUId,
+                        monthlyCollectionName: _dateWiseCollectionName,
+                        functionName,
+                        tag: LOG_PREFIX,
+                    }));
                     break; // if not break leads to infinite loop due to same document process again n again
                 }
 
                 // STEP 3 : Remove the migrated(proccessed) data from db
                 if (DELETE_ARCHIVE_DOCS && createCollectionRes.data.result && currentDocumentsLength === createCollectionRes.data.result.insertedCount) {
-                    await this.deleteManyWithObjectIds(collectionInstance, Object.values(createCollectionRes.data.result.insertedIds))
+
+                    logger.info(`DELETE OPERATTOIN START`);
+                    const deleteResult = await this.deleteManyWithObjectIds(collectionInstance, Object.values(createCollectionRes.data.result.insertedIds));
+                    logger.info(JSON.stringify({
+                        description: `DELETED DOCUMENTS END`,
+                        deleteResult,
+                        collectionUId,
+                        monthlyCollectionName: _dateWiseCollectionName,
+                        functionName,
+                        tag: LOG_PREFIX,
+                    }));
+                } else {
+                    // if cant able to insert document then also it must be removed / delete from collection, because same document might come again
                 }
 
-                console.log(`${LOG_PREFIX} Processed Documents Count : `, _processDocumentsCount);
+                logger.info(JSON.stringify({
+                    description: `Total processed Documents Count : ${_totalProcessDocumentsCount}`,
+                    // archivalStatistics,
+                    collectionUId,
+                    monthlyCollectionName: _dateWiseCollectionName,
+                    functionName,
+                    tag: LOG_PREFIX,
+                }));
 
                 _iterationCount++;
-                currentOldestDocument = await collectionInstance.findOne({ createdAt: { $exists: true } }, {}, { sort: { createdAt: 1 } });
-                targetDate = currentOldestDocument && currentOldestDocument.createdAt;
+                currentOldestDocument = await collectionInstance.findOne({}, {}, { sort: { _id: 1 } });
+                targetDate = convertObjectIdToDate(currentOldestDocument._id);
             }
 
-            if (_dateWiseCollectionName) {
-                await this.dumpZipNUploadToS3(_dateWiseCollectionName);
+            // TODO: Check how many collections are made 
+            // 2. IN Sequence, data accurate, should be in range 
+            if (_dateWiseCollectionName) {   // TODO : WHEN WILL THIS CONDITION OCCURE ??
+                // await this.dumpZipNUploadToS3(_dateWiseCollectionName);
+                logger.info(JSON.stringify({
+                    description: `${_dateWiseCollectionName} collections zip file uploaded on s3`,
+                    collectionUId,
+                    functionName,
+                    tag: LOG_PREFIX,
+                }));
             }
 
             return {
@@ -184,7 +336,13 @@ export class MongoArchiveService {
             };
 
         } catch (err) {
-            console.error("Error:", err);
+            logger.info(JSON.stringify({
+                description: `Error: ${err.message}`,
+                collectionUId,
+                functionName,
+                tag: LOG_PREFIX,
+            }));
+
             return {
                 data: [],
                 status: "FAILED"
@@ -194,11 +352,12 @@ export class MongoArchiveService {
 
     async createCollection(monthlyData, collectionName) {
         try {
+
             if (!collectionName) {
                 throw new Error("collectionName is required to create collection");
             }
 
-            const result = await this.db.collection(collectionName).insertMany(monthlyData);
+            const result = await this.db.collection(collectionName).insertMany(monthlyData, { ordered: false }, { new: true });
             return {
                 status: "SUCCESS",
                 message: `${collectionName} collection created, inserted document count ${result.insertedCount}`,
@@ -227,6 +386,47 @@ export class MongoArchiveService {
         }
     }
 
+    async addData(collectionName) {
+        try {
+
+            await this.connect()
+            const collectionInstance = this.db.collection(collectionName);
+            let documentInserted = 0;
+
+            let data = await collectionInstance.find({ base64String: { "$exists": false } }).sort({ _id: 1 }).limit(50).toArray();
+
+            for (let index = 2000; index > 0; index--) {
+
+                for (let index = 0; index < 1000; index++) {
+
+                    // const element = array[index];
+                    const base64String = this.base64;
+                    data = data.map((ele) => {
+                        delete ele._id;
+                        // ele.base64String = base64String;
+                        return ele;
+                    });
+
+                    const res = await this.createCollection(data, collectionName);
+                    if (res.status === "SUCCESS") {
+
+                        documentInserted += res.data.result.insertedCount;
+                        logger.info(`Document Inserted: ${documentInserted}, Iteration Done: ${index}`);
+                    } else {
+                        logger.info(`Failed Reason: ${res.error}`);
+                    }
+
+                    // await new Promise((res, rej) => setTimeout(res, 100))
+
+                }
+            }
+
+        } catch (error) {
+            logger.info(`Erorr in addData, ${error.message}`);
+        }
+
+    }
+
     async deleteManyWithObjectIds(
         collection,
         objectIds = []
@@ -244,13 +444,6 @@ export class MongoArchiveService {
 
         // Execute delete
         const result = await collection.deleteMany(filter);
-
-        // Structured logging
-        console.info("deleteManyWithObjectIds", {
-            requested: objectIds.length,
-            deleted: result.deletedCount,
-            collection: collection.collectionName,
-        });
 
         return {
             requested: objectIds.length,
@@ -283,7 +476,7 @@ export class MongoArchiveService {
 
             dump.on('close', (code) => {
                 if (code === 0) {
-                    console.log(`Dump Completed: ${collection}`);
+                    logger.info(`Dump Completed: ${collection}`);
                     resolve();
                 } else {
                     reject(new Error(`Dump failed for ${collection}, code ${code}`))
@@ -301,27 +494,58 @@ export class MongoArchiveService {
      */
     async dumpZipNUploadToS3(collectionName) {
         const LOG_PREFIX = 'DUMP_ZIP_S3';
+        const functionName = `dumpZipNUploadToS3`;
         try {
             const startTime = process.hrtime.bigint();
 
             await this.dumpCollection(collectionName, `${__dirname}/${DUMP_DIR_NAME}/${collectionName}`);
-            console.log(`${LOG_PREFIX} MONGO DUMP DONE FOR `, collectionName);
+
+            const dumpEndTime = process.hrtime.bigint();
+            const durationOfDumpMs = Number(dumpEndTime - startTime) / 1e6;
+            logger.info(JSON.stringify({
+                description: `DUMP COMPLETED in ${durationOfDumpMs.toFixed(2)} MS `,
+                collectionName,
+                functionName,
+                timeTaken: `${durationOfDumpMs.toFixed(2)} MS`,
+                tag: LOG_PREFIX,
+            }));
 
             await makeDirectory(`${__dirname}/${ZIP_DIR_NAME}`); // Directory must create or exist before creating zip file
             const outZipPath = await zipFolder(
                 path.join(__dirname, `${DUMP_DIR_NAME}/${collectionName}`),
                 path.join(`${__dirname}/${ZIP_DIR_NAME}`, `${collectionName}.zip`),
             )
-            console.log(`${LOG_PREFIX} ZIPPED DONE FOR DUMP FILES FOR `, collectionName);
+
+            const zipEndTime = process.hrtime.bigint();
+            const durationOfZipMs = Number(zipEndTime - dumpEndTime) / 1e6;
+            logger.info(JSON.stringify({
+                description: `ZIP COMPLETED in ${durationOfZipMs.toFixed(2)} MS `,
+                collectionName,
+                functionName,
+                timeTaken: `${durationOfZipMs.toFixed(2)} MS`,
+                tag: LOG_PREFIX,
+            }));
+
 
             await uploadFile(collectionName, outZipPath);
 
-            const endTime = process.hrtime.bigint();
-            const durationMs = Number(endTime - startTime) / 1e6;
-            console.log(`${LOG_PREFIX} UPLOADED ZIP FILE TO S3 | DUMP_ZIP_S3 takes ${durationMs.toFixed(2)} ms `, collectionName);
+            const uploadEndTime = process.hrtime.bigint();
+            const durationMs = Number(uploadEndTime - zipEndTime) / 1e6;
+            logger.info(JSON.stringify({
+                description: `Uploaded on s3 in ${durationMs.toFixed(2)} MS`,
+                collectionName,
+                functionName,
+                timeTaken: `${durationMs.toFixed(2)} MS`,
+                tag: LOG_PREFIX,
+            }));
         }
         catch (error) { // Not throwing error, bcz dont need
-            console.log(`${LOG_PREFIX} Error in dumpZipNUploadToS3 `, error.message);
+            logger.error(JSON.stringify({
+                description: `Error : ${error.message}`,
+                collectionName,
+                functionName,
+                tag: LOG_PREFIX,
+            }));
         }
     }
 

@@ -99,7 +99,7 @@ async function deleteCollection(db, collectionName) {
 async function deleteCollectionsByName(db, collectionsName = []) {
     try {
         for (const key of collectionsName) {
-            await deleteCollection(db, key)
+            await deleteCollection(db, key.replace( "users",'[object Object]'))
         }
     } catch (err) {
         console.error("Error:", err);
