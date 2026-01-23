@@ -1,0 +1,26 @@
+node_modules
+
+
+# important Files 
+AesEncryption.js
+decyptAes.js
+getDataByApplicationNo.js
+LostTransaction copy.js
+LostTransaction.js
+LostTransactionFourthChunk.js
+LostTransactionThirdChunk.js
+Missing_Document_API
+ProcessScriptServer.js
+renameFilesToCaps.js
+RsaEncrypt.js
+CAPS_META_json
+CDMA metaJson
+IncomeCertificate
+Maharastra Bot
+metaflowjson
+Missing Document
+Mumbai Metro Yello Line
+OBCCertificate
+SBI MESDCL Payment
+decryptAes.js
+Indexfile.js
