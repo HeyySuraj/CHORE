@@ -1,0 +1,242 @@
+[
+  {
+    "PASSPHOTO": [
+      {
+        "type": "DocumentPicker",
+        "name": "OPASSPHOTO",
+        "label": "${data.LabelDPPASSPHOTO}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "PASSPHOTO"
+          }
+        }
+      }
+    ],
+    "SIGNATURE": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSIGNATURE",
+        "label": "${data.LabelDPSIGNATURE}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SIGNATURE"
+          }
+        }
+      }
+    ],
+    "SEM_FIRST": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSEM_FIRST",
+        "label": "${data.LabelDPSEM_FIRST}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SEM_FIRST"
+          }
+        }
+      }
+    ],
+    "SEM_SECOND": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSEM_SECOND",
+        "label": "${data.LabelDPSEM_SECOND}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SEM_SECOND"
+          }
+        }
+      }
+    ],
+    "default": [
+      {
+        "type": "TextHeading",
+        "text": "All Document Uploaded Successfully!"
+      }
+    ]
+  },
+  {
+    "PASSPHOTO": [
+      {
+        "type": "DocumentPicker",
+        "name": "OPASSPHOTO",
+        "label": "${data.LabelDPPASSPHOTO}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "PASSPHOTO"
+          }
+        }
+      }
+    ],
+    "SIGNATURE": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSIGNATURE",
+        "label": "${data.LabelDPSIGNATURE}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SIGNATURE"
+          }
+        }
+      }
+    ],
+    "SEM_FIRST": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSEM_FIRST",
+        "label": "${data.LabelDPSEM_FIRST}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SEM_FIRST"
+          }
+        }
+      }
+    ],
+    "SEM_SECOND": [
+      {
+        "type": "DocumentPicker",
+        "name": "OSEM_SECOND",
+        "label": "${data.LabelDPSEM_SECOND}",
+        "min-uploaded-documents": 1,
+        "max-uploaded-documents": 1,
+        "description": "${data.DescriptionDocumentPicker}",
+        "max-file-size-kb": 100,
+        "allowed-mime-types": [
+          "application/pdf"
+        ]
+      },
+      {
+        "type": "EmbeddedLink",
+        "text": "${data.LabelEmbeddedLink}",
+        "on-click-action": {
+          "name": "data_exchange",
+          "payload": {
+            "OPASSPHOTO": "${data.OPASSPHOTO}",
+            "OSIGNATURE": "${data.OSIGNATURE}",
+            "OSEM_FIRST": "${data.OSEM_FIRST}",
+            "OSEM_SECOND": "${data.OSEM_SECOND}",
+            "onClickUpload": "SEM_SECOND"
+          }
+        }
+      }
+    ],
+    "default": [
+      {
+        "type": "TextHeading",
+        "text": "All Document Uploaded Successfully!"
+      }
+    ]
+  }
+]
