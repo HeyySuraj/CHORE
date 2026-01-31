@@ -1,0 +1,225 @@
+[
+  {
+    "data": {
+      "LabelDocumentTextHeading": {
+        "type": "string",
+        "__example__": "Upload Photograph"
+      },
+      "InstructionMarkdown": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "__example__": [
+          "**Instructions for issued Photo:**",
+          "+ The size of photograph should fall between 5KB to 20KB",
+          "+ Photograph format should be JPEG",
+          "+ The width of the photograph should be 160 pixels",
+          "+ The height of photograph should fall between 200 to 212 pixels"
+        ]
+      },
+      "VisibleInstructionMarkdown": {
+        "type": "boolean",
+        "__example__": false
+      },
+      "SWITCH_TO": {
+        "type": "string",
+        "__example__": "PASSPHOTO"
+      },
+      "LabelFooter": {
+        "type": "string",
+        "__example__": "Submit"
+      },
+      "EnableUpdateDocumentFooter": {
+        "type": "boolean",
+        "__example__": false
+      },
+      "DescriptionDocumentPicker": {
+        "type": "string",
+        "__example__": "Please read all the instruction before uploading the document"
+      },
+      "LabelEmbeddedLink": {
+        "type": "string",
+        "__example__": "Please read all the instruction before uploading the document"
+      },
+      "LabelDP_PASSPHOTO": {
+        "type": "string",
+        "__example__": "Upload PASSPHOTO"
+      },
+      "LabelDP_SIGNATURE": {
+        "type": "string",
+        "__example__": "Upload SIGNATURE"
+      },
+      "LabelDP_Address_Proof": {
+        "type": "string",
+        "__example__": "Upload Address_Proof"
+      },
+      "LabelDP_Identity_Proof": {
+        "type": "string",
+        "__example__": "Upload Identity_Proof"
+      }
+    },
+    "id": "UPLOAD_DOCUMENTS",
+    "title": "Upload Documents",
+    "layout": {
+      "type": "SingleColumnLayout",
+      "children": [
+        {
+          "type": "Form",
+          "name": "form",
+          "children": [
+            {
+              "text": "${data.LabelDocumentTextHeading}",
+              "type": "TextHeading"
+            },
+            {
+              "type": "TextBody",
+              "markdown": true,
+              "visible": "${data.VisibleInstructionMarkdown}",
+              "text": "${data.InstructionMarkdown}"
+            },
+            {
+              "type": "Switch",
+              "value": "${data.SWITCH_TO}",
+              "cases": {
+                "PASSPHOTO": [
+                  {
+                    "type": "DocumentPicker",
+                    "name": "OPASSPHOTO",
+                    "label": "${data.LabelDP_PASSPHOTO}",
+                    "min-uploaded-documents": 1,
+                    "max-uploaded-documents": 1,
+                    "description": "${data.DescriptionDocumentPicker}",
+                    "max-file-size-kb": 20,
+                    "allowed-mime-types": [
+                      "image/jpeg"
+                    ]
+                  },
+                  {
+                    "type": "EmbeddedLink",
+                    "text": "${data.LabelEmbeddedLink}",
+                    "on-click-action": {
+                      "name": "data_exchange",
+                      "payload": {
+                        "OPASSPHOTO": "${form.OPASSPHOTO}",
+                        "OSIGNATURE": "${form.OSIGNATURE}",
+                        "OAddress_Proof": "${form.OAddress_Proof}",
+                        "OIdentity_Proof": "${form.OIdentity_Proof}",
+                        "onClickUpload": "PASSPHOTO"
+                      }
+                    }
+                  }
+                ],
+                "SIGNATURE": [
+                  {
+                    "type": "DocumentPicker",
+                    "name": "OSIGNATURE",
+                    "label": "${data.LabelDP_SIGNATURE}",
+                    "min-uploaded-documents": 1,
+                    "max-uploaded-documents": 1,
+                    "description": "${data.DescriptionDocumentPicker}",
+                    "max-file-size-kb": 20,
+                    "allowed-mime-types": [
+                      "image/jpeg"
+                    ]
+                  },
+                  {
+                    "type": "EmbeddedLink",
+                    "text": "${data.LabelEmbeddedLink}",
+                    "on-click-action": {
+                      "name": "data_exchange",
+                      "payload": {
+                        "OPASSPHOTO": "${form.OPASSPHOTO}",
+                        "OSIGNATURE": "${form.OSIGNATURE}",
+                        "OAddress_Proof": "${form.OAddress_Proof}",
+                        "OIdentity_Proof": "${form.OIdentity_Proof}",
+                        "onClickUpload": "SIGNATURE"
+                      }
+                    }
+                  }
+                ],
+                "Address_Proof": [
+                  {
+                    "type": "DocumentPicker",
+                    "name": "OAddress_Proof",
+                    "label": "${data.LabelDP_Address_Proof}",
+                    "min-uploaded-documents": 1,
+                    "max-uploaded-documents": 1,
+                    "description": "${data.DescriptionDocumentPicker}",
+                    "max-file-size-kb": 20,
+                    "allowed-mime-types": [
+                      "image/jpeg"
+                    ]
+                  },
+                  {
+                    "type": "EmbeddedLink",
+                    "text": "${data.LabelEmbeddedLink}",
+                    "on-click-action": {
+                      "name": "data_exchange",
+                      "payload": {
+                        "OPASSPHOTO": "${form.OPASSPHOTO}",
+                        "OSIGNATURE": "${form.OSIGNATURE}",
+                        "OAddress_Proof": "${form.OAddress_Proof}",
+                        "OIdentity_Proof": "${form.OIdentity_Proof}",
+                        "onClickUpload": "Address_Proof"
+                      }
+                    }
+                  }
+                ],
+                "Identity_Proof": [
+                  {
+                    "type": "DocumentPicker",
+                    "name": "OIdentity_Proof",
+                    "label": "${data.LabelDP_Identity_Proof}",
+                    "min-uploaded-documents": 1,
+                    "max-uploaded-documents": 1,
+                    "description": "${data.DescriptionDocumentPicker}",
+                    "max-file-size-kb": 20,
+                    "allowed-mime-types": [
+                      "image/jpeg"
+                    ]
+                  },
+                  {
+                    "type": "EmbeddedLink",
+                    "text": "${data.LabelEmbeddedLink}",
+                    "on-click-action": {
+                      "name": "data_exchange",
+                      "payload": {
+                        "OPASSPHOTO": "${form.OPASSPHOTO}",
+                        "OSIGNATURE": "${form.OSIGNATURE}",
+                        "OAddress_Proof": "${form.OAddress_Proof}",
+                        "OIdentity_Proof": "${form.OIdentity_Proof}",
+                        "onClickUpload": "Identity_Proof"
+                      }
+                    }
+                  }
+                ],
+                "default": [
+                  {
+                    "type": "TextHeading",
+                    "text": "All Document Uploaded Successfully!"
+                  }
+                ]
+              }
+            },
+            {
+              "on-click-action": {
+                "name": "complete",
+                "payload": {
+                  "OPASSPHOTO": "${form.OPASSPHOTO}",
+                  "OSIGNATURE": "${form.OSIGNATURE}",
+                  "OAddress_Proof": "${form.OAddress_Proof}",
+                  "OIdentity_Proof": "${form.OIdentity_Proof}"
+                }
+              },
+              "label": "${data.LabelFooter}",
+              "enabled": "${data.EnableUpdateDocumentFooter}",
+              "type": "Footer"
+            }
+          ]
+        }
+      ]
+    },
+    "terminal": true
+  }
+]
