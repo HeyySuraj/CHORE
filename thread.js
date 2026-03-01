@@ -2,6 +2,46 @@ import { Worker, isMainThread, parentPort, workerData } from "worker_threads";
 import fetch from "node-fetch";
 import os from "os";
 
+
+
+//#region ------------------------- High-level flow -------------------------------------------
+/*
+START
+  │
+  ▼
+Main Thread starts
+  │
+  ▼
+runAll() called
+  │
+  ▼
+Create initial workers (up to maxThreads)
+  │
+  ▼
+Each worker processes a URL
+  │
+  ▼
+Worker sends result back
+  │
+  ▼
+Main thread schedules next job
+  │
+  ▼
+Repeat until all URLs done
+  │
+  ▼
+Print total time + results
+  │
+  ▼
+END
+*/
+//#end-------------------------------
+
+
+
+
+
+
 const imageUrls = [
   "https://picsum.photos/200/300",
   "https://picsum.photos/300/300",
