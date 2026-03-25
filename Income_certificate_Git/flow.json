@@ -970,152 +970,17 @@
         },
         {
             "data": {
-                "ODeleteCheckbox": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "__example__": []
-                },
-                "OFamilyMemberRelation": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFamilyMemberName": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFamilyMemberAge": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFamilyMemberOccupation": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFamilyMemberIncome": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OAddress": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OBuilding": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OSection": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OStreet": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OLandmark": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "ODistrict": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OTaluka": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OVillage": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OPincode": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OPanCardNo": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OPancard": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OSalutationRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OfullNameEngRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OfullNameMarRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFatherSalutationRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFathersNameEngRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OFathersNameMarRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OdateOfBirthRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OAgeRes": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OMobileNumber": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OGender": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OEmailId": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "Ooccupation": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OAdharNumber": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OApplicantNationality": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "OIncomeYear": {
-                    "type": "string",
-                    "__example__": ""
-                },
-                "extraDetails": {
-                    "type": "string",
-                    "__example__": ""
-                },
                 "ScreenNameBeneficiaryInformation": {
                     "type": "string",
                     "__example__": "Beneficiary Information"
                 },
                 "LabelBeneficiaryInformation": {
                     "type": "string",
-                    "__example__": "Beneficiary Information"
+                    "__example__": "Enter beneficiary details"
                 },
                 "LableRelation": {
                     "type": "string",
-                    "__example__": "Relation"
+                    "__example__": "Relation with Applicant"
                 },
                 "ListRelation": {
                     "type": "array",
@@ -1132,98 +997,34 @@
                     },
                     "__example__": [
                         {
-                            "id": "Aai",
-                            "title": "Aai"
+                            "id": "father",
+                            "title": "Father"
                         },
                         {
-                            "id": "Aaji",
-                            "title": "Aaji"
-                        },
-                        {
-                            "id": "Ajoba",
-                            "title": "Ajoba"
+                            "id": "mother",
+                            "title": "Mother"
                         }
                     ]
                 },
                 "LableBeneficiarySalutation": {
                     "type": "string",
-                    "__example__": "Beneficiary Salutation"
-                },
-                "InitBeneficiaryName": {
-                    "type": "string",
-                    "__example__": "Beneficiary Name"
-                },
-                "ListBeneficiarySalutation": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string"
-                            },
-                            "title": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "__example__": [
-                        {
-                            "id": "Kumar",
-                            "title": "Kumar"
-                        },
-                        {
-                            "id": "Kumari",
-                            "title": "Kumari"
-                        },
-                        {
-                            "id": "lawyer",
-                            "title": "Lawyer"
-                        }
-                    ]
+                    "__example__": "Salutation"
                 },
                 "LableBeneficiaryName": {
                     "type": "string",
                     "__example__": "Beneficiary Name"
                 },
-                "LableIncomeCertificateReason": {
+                "InitBeneficiaryName": {
                     "type": "string",
-                    "__example__": "Income Certificate Reason?"
-                },
-                "ListIncomeCertificateReason": {
-                    "type": "array",
-                    "items": {
-                        "type": "object",
-                        "properties": {
-                            "id": {
-                                "type": "string"
-                            },
-                            "title": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    "__example__": [
-                        {
-                            "id": "Education",
-                            "title": "Education"
-                        },
-                        {
-                            "id": "Medical",
-                            "title": "Medical"
-                        },
-                        {
-                            "id": "Others",
-                            "title": "Others"
-                        }
-                    ]
-                },
-                "LableReasonForIncomeCert": {
-                    "type": "string",
-                    "__example__": "Reason for why Income Certificate Required"
+                    "__example__": "Ramesh Kumar"
                 },
                 "FooterBeneficiaryInformation": {
                     "type": "string",
                     "__example__": "Continue"
+                },
+                "extraDetails": {
+                    "type": "string",
+                    "__example__": ""
                 }
             },
             "id": "BENEFICIARY_INFORMATION",
@@ -1251,13 +1052,6 @@
                         }
                     },
                     {
-                        "label": "${data.LableBeneficiarySalutation}",
-                        "name": "OBeneficiarySalutation",
-                        "required": true,
-                        "data-source": "${data.ListBeneficiarySalutation}",
-                        "type": "Dropdown"
-                    },
-                    {
                         "label": "${data.LableBeneficiaryName}",
                         "name": "OBeneficiaryName",
                         "required": true,
@@ -1265,82 +1059,12 @@
                         "type": "TextInput"
                     },
                     {
-                        "label": "${data.LableIncomeCertificateReason}",
-                        "name": "OIncomeCertificateReason",
-                        "data-source": "${data.ListIncomeCertificateReason}",
-                        "required": true,
-                        "type": "Dropdown"
-                    },
-                    {
-                        "label": "${data.LableReasonForIncomeCert}",
-                        "name": "OReasonForIncomeCert",
-                        "required": true,
-                        "type": "TextArea"
-                    },
-                    {
                         "on-click-action": {
                             "name": "data_exchange",
                             "payload": {
-                                "OUserName": "${data.OUserName}",
-                                "OFirstDropdown": "${data.OFirstDropdown}",
-                                "OSalutation": "${data.OSalutation}",
-                                "OFullNameEnglish": "${data.OFullNameEnglish}",
-                                "OFullNameMarathi": "${data.OFullNameMarathi}",
-                                "OFatherSalutation": "${data.OFatherSalutation}",
-                                "OFatherNameEnglish": "${data.OFatherNameEnglish}",
-                                "OFatherNameMarathi": "${data.OFatherNameMarathi}",
-                                "ODateOfBirth": "${data.ODateOfBirth}",
-                                "OAge": "${data.OAge}",
-                                "OMobileNumber": "${data.OMobileNumber}",
-                                "OGender": "${data.OGender}",
-                                "OEmailId": "${data.OEmailId}",
-                                "OOccupation": "${data.OOccupation}",
-                                "OAddress": "${data.OAddress}",
-                                "OBuilding": "${data.OBuilding}",
-                                "OSection": "${data.OSection}",
-                                "OStreet": "${data.OStreet}",
-                                "OLandmark": "${data.OLandmark}",
-                                "ODistrict": "${data.ODistrict}",
-                                "OTaluka": "${data.OTaluka}",
-                                "OVillage": "${data.OVillage}",
-                                "OPincode": "${data.OPincode}",
-                                "OPanCardNo": "${data.OPanCardNo}",
-                                "OSameAsPresentAddress": "${data.OSameAsPresentAddress}",
-                                "OPermanentAddre": "${data.OPermanentAddre}",
-                                "OPermanentBuilding": "${data.OPermanentBuilding}",
-                                "OPermanentSection": "${data.OPermanentSection}",
-                                "OPermanentStreet": "${data.OPermanentStreet}",
-                                "OPermanentLandmark": "${data.OPermanentLandmark}",
-                                "OPermanentDistrict": "${data.OPermanentDistrict}",
-                                "OPermanentTaluka": "${data.OPermanentTaluka}",
-                                "OPermanentVillage": "${data.OPermanentVillage}",
-                                "OPermanentPincode": "${data.OPermanentPincode}",
-                                "ODeleteCheckbox": "${data.ODeleteCheckbox}",
-                                "OFamilyMemberRelation": "${data.OFamilyMemberRelation}",
-                                "OFamilyMemberName": "${data.OFamilyMemberName}",
-                                "OFamilyMemberAge": "${data.OFamilyMemberAge}",
-                                "OFamilyMemberOccupation": "${data.OFamilyMemberOccupation}",
-                                "OFamilyMemberIncome": "${data.OFamilyMemberIncome}",
-                                "OPancard": "${data.OPancard}",
-                                "OSalutationRes": "${data.OSalutationRes}",
-                                "OfullNameEngRes": "${data.OfullNameEngRes}",
-                                "OfullNameMarRes": "${data.OfullNameMarRes}",
-                                "OFatherSalutationRes": "${data.OFatherSalutationRes}",
-                                "OFathersNameEngRes": "${data.OFathersNameEngRes}",
-                                "OFathersNameMarRes": "${data.OFathersNameMarRes}",
-                                "OdateOfBirthRes": "${data.OdateOfBirthRes}",
-                                "OAgeRes": "${data.OAgeRes}",
-                                "Ooccupation": "${data.Ooccupation}",
-                                "OAdharNumber": "${data.OAdharNumber}",
-                                "OApplicantNationality": "${data.OApplicantNationality}",
-                                "OIncomeYear": "${data.OIncomeYear}",
-                                "extraDetails": "${data.extraDetails}",
-                                "ORelation": "${form.ORelation}",
-                                "OBeneficiarySalutation": "${form.OBeneficiarySalutation}",
-                                "OBeneficiaryName": "${form.OBeneficiaryName}",
-                                "OBeneficiaryRelation": "${form.OBeneficiaryRelation}",
-                                "OIncomeCertificateReason": "${form.OIncomeCertificateReason}",
-                                "OReasonForIncomeCert": "${form.OReasonForIncomeCert}"
+                                "BENEFICIARY_INFORMATION": "${screen.BENEFICIARY_INFORMATION.form}",
+                                "OFetchFromAadhaar": "${form.OFetchFromAadhaar}",
+                                "extraDetails": "${data.extraDetails}"
                             }
                         },
                         "label": "${data.FooterBeneficiaryInformation}",
@@ -2315,7 +2039,6 @@
                                 "OUserName": "${data.OUserName}",
                                 "OFirstDropdown": "${data.OFirstDropdown}",
                                 "OSalutation": "${data.OSalutation}",
-                                "OFullNameEnglish": "${data.OFullNameEnglish}",
                                 "OFullNameMarathi": "${data.OFullNameMarathi}",
                                 "OFatherSalutation": "${data.OFatherSalutation}",
                                 "OFatherNameEnglish": "${data.OFatherNameEnglish}",
@@ -2421,6 +2144,9 @@
                                 "OInterestDividentsDesc": "${form.OInterestDividentsDesc}",
                                 "OIncomeFromOtherSoucesDesc": "${form.OIncomeFromOtherSoucesDesc}",
                                 "OAttachement": "${form.OAttachement}",
+                                "WELCOME": "${screen.WELCOME.form}",
+                                "OFullNameEnglish": "${screen.WELCOME.form.OFullNameEnglish}",
+                                "OFatherNameEnglish": "${screen.WELCOME.form.OFatherNameEnglish}",
                                 "SWITCH_TO": "default"
                             }
                         },
