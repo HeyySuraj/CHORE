@@ -1,0 +1,148 @@
+{
+    "LangID": "2",
+    "Isaadhar": "1",
+    "IncomeType_Value": "2",
+    "ServiceId": "1251",
+    "ServiceName": "Income Certificate",
+    "UserID": "224a14e9-33e8-4c5a-8d48-fe20d26769f6",
+    "DivisionId": "6",
+    "IncomeYear": "१ वर्षासाठी",
+    "ApplicantSalutation": "5fd0e1a4-bca8-4422-9832-d8b11bfefede",
+    "ApplicantNameEnglish": "MAHESH DHANAVADE",
+    "ApplicantNameMarathi": "महेश धनावडे",
+    "ApplicantFatherSalutation": "5fd0e1a4-bca8-4422-9832-d8b11bfefede",
+    "ApplicantFatherNameEnglish": "Dattaram Dhanavade",
+    "ApplicantFatherNameMarathi": "दत्ताराम धनावडे",
+    "ApplicantDOB": "10/01/1953",
+    "ApplicantAge": "70",
+    "ApplicantMobileNo": "9930221446",
+    "ApplicantGender": "पुरुष",
+    "ApplicantEmailID": "mahesh.dhanavade@mahait.org",
+    "ApplicantOccupation": "उद्योग ",
+    "ApplicantNationality": "INDIAN",
+    "ApplicantAddress": "अद्द्रेस1",
+    "ApplicantBuilding": "बील्डींग",
+    "ApplicantSection": "सेक्शन",
+    "ApplicantStreet": "स्ट्रीट",
+    "ApplicantLandmark": "लॅन्डमार्क",
+    "ApplicantDistrict": "519",
+    "ApplicantSubDistrict": "5924",
+    "ApplicantVillage": "900705",
+    "ApplicantPinCode": "400001",
+    "ApplicantPAN": "ALMPD3510B",
+    "BeneficiaryRelation": "2EE177C8-65FA-4530-9C7C-691AAD8937BD",
+    "BeneficiarySalutation": "64AA5BDE-4204-4EF5-9071-DDDF5E5032F5",
+    "BeneficiaryName": "दुर्वा धनावडे",
+    "BeneficiaryCertificateReason": "बेफी रीज़न",
+    "IncomeAttachmentID": "प्रतिज्ञापत्र",
+    "CreatedBy": "224a14e9-33e8-4c5a-8d48-fe20d26769f6",
+    "IncomeFamiliyIncomeModel": [
+        {
+           
+        }
+        
+    ],
+    "IncomeFamiliyFarmingIncomeModel": [
+        {
+            
+        }
+    ],
+    "IncomeSourceModel": [
+        {
+            "Applicantid": "",
+            "Incomesource": "शेती",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "1",
+            "IncomeRemarks": "1"
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "शेती पुरक व्यवसाय",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "दुग्ध व्यवसाय",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "शेत मजुरीचे उत्पन्न",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "इतर मजुरी",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "इतर व्यवसाय/ उद्योग / धंदा/ व्यापार",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "शेतीशिवाय ईतर स्थावर मिळकती पासूनचे उत्पन्न",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "नौकरीतील वेतन/ सेवानीवृत वेतन/ मानधन/ अनुदान इत्यादी मासिक उत्पन्न पासूनचे वार्षिक उत्पन्न",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "गुंतवणुकीवरील व्याज/ लाभांश व तत्सम उत्पन्न",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "वर नमूद साधनांशिवाय इतर उत्पन्नाची साधने असल्यास त्या पासूनचे उत्पन्न",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "एकूण",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "1",
+            "IncomeRemarks": ""
+        },
+        {
+            "Applicantid": "",
+            "Incomesource": "एकूण (अक्षरी)",
+            "FirstFinancialYear": "0",
+            "SecondFinancialYear": "0",
+            "ThirdFinancialYear": "एक",
+            "IncomeRemarks": ""
+        }
+    ]
+}
