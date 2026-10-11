@@ -1,8 +1,8 @@
-const amqp = require('amqp-connection-manager');
-const winston = require('winston');
-const LokiTransport = require('winston-loki');
-const { randomUUID } = require('crypto');
-const mongoose = require('mongoose');
+simport amqp from 'amqp-connection-manager';
+import winston from 'winston';
+import LokiTransport from 'winston-loki';
+import { randomUUID } from 'crypto';
+import mongoose from 'mongoose';
 
 const { model, Schema } = mongoose;
 
@@ -13,7 +13,7 @@ const QUEUE_NAME = 'bot_journey_milestone_node_queue';
 const BATCH_SIZE = 100; // Number of messages per batch (Also works as PREFETCH)
 const BATCH_INTERVAL_IN_MS = 5000; // Interval (in milliseconds) to insert the batch (5 Second)
 
-const MONGODB_URI = 'mongodb://localhost:27017/1spoc-staging';
+const MONGODB_URI = 'mongodb://localhost:27017/1spoc-staging-reporting';
 const COLLECTION_NAME = 'mileStoneBotJourney';
 
 const ENABLE_DEBUG_LOGS = false;
